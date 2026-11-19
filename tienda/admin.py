@@ -22,3 +22,4 @@ class ClienteAdmin(admin.ModelAdmin):
     search_fields = ('nombre','email')
     ordering = ('nombre',)
     date_hierarchy = 'fecha_registro'
+    
