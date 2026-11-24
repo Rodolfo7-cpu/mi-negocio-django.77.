@@ -1,74 +1,163 @@
-html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mi Negocio{% endblock %}</title>
+    <title>{% block title %}Negocio "Miscelania El Tey"{% endblock %}</title>
     <style>
+        :root {
+            --primario: #DFCAA4;
+            --secundario: #293570;
+            --texto: #000000;
+            --exito: #A2ECA3;
+            --error: #FC4F4F;
+            --advertencia: #F7D708;
+            --blanco: #ffffff;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f4f6f8; color: #333; }
+        body { font-family: Arial, sans-serif; background: var(--primario); color: var(--texto); }
+
         header {
-            background: #1e293b; color: #fff; padding: 15px 30px;
+            background: var(--secundario); color: var(--primario); padding: 15px 30px;
             display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px;
         }
         header h1 { font-size: 22px; }
+        header nav { display: flex; align-items: center; flex-wrap: wrap; }
         header nav a {
-            color: #fff; text-decoration: none; margin-left: 20px; font-weight: bold;
+            color: var(--primario); text-decoration: none; margin-left: 20px; font-weight: bold;
         }
-        header nav a:hover { color: #38bdf8; }
+        header nav a:hover { color: var(--blanco); }
+        header nav span { color: var(--blanco); margin-left: 20px; }
+
+        /* Botón hamburguesa: oculto en escritorio */
+        .menu-toggle {
+            display: none; background: transparent; color: var(--primario);
+            border: 2px solid var(--primario); border-radius: 6px;
+            font-size: 22px; line-height: 1; padding: 6px 12px; cursor: pointer;
+        }
+        .menu-toggle:hover { color: var(--blanco); border-color: var(--blanco); }
+
         .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
         .card {
-            background: #fff; border-radius: 8px; padding: 20px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 20px;
+            background: var(--blanco); border-radius: 8px; padding: 20px;
+            box-shadow: 0 2px 6px rgba(41, 53, 112, 0.2); margin-bottom: 20px;
+            border-top: 4px solid var(--secundario);
         }
+
         .btn {
             display: inline-block; padding: 10px 16px; border-radius: 6px;
-            text-decoration: none; color: #fff; font-weight: bold; border: none;
+            text-decoration: none; color: var(--texto); font-weight: bold; border: none;
             cursor: pointer; font-size: 14px; margin: 2px;
         }
-        .btn-primary { background: #2563eb; }
-        .btn-success { background: #16a34a; }
-        .btn-danger { background: #dc2626; }
-        .btn-warning { background: #d97706; }
-        .btn-secondary { background: #64748b; }
-        .btn:hover { opacity: 0.9; }
+        .btn-primary { background: var(--primario); border: 1px solid var(--secundario); }
+        .btn-secondary { background: var(--secundario); color: var(--blanco); }
+        .btn-success { background: var(--exito); }
+        .btn-danger { background: var(--error); }
+        .btn-warning { background: var(--advertencia); }
+        .btn:hover { opacity: 0.85; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-        th { background: #f1f5f9; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--primario); }
+        th { background: var(--secundario); color: var(--blanco); }
+        tr:hover td { background: #f7f1e6; }
+
         .messages { list-style: none; margin-bottom: 15px; }
-        .messages li { padding: 10px; border-radius: 6px; margin-bottom: 8px; }
-        .messages .success { background: #dcfce7; color: #166534; }
-        .messages .error { background: #fee2e2; color: #991b1b; }
-        footer { text-align: center; padding: 20px; color: #64748b; font-size: 13px; }
+        .messages li {
+            padding: 10px; border-radius: 6px; margin-bottom: 8px;
+            color: var(--texto); background: var(--blanco);
+            border-left: 6px solid var(--secundario);
+        }
+        .messages .success { background: var(--exito); border-left-color: #4caf50; }
+        .messages .error { background: var(--error); border-left-color: #b71c1c; }
+        .messages .warning { background: var(--advertencia); border-left-color: #a08900; }
+
+        footer { text-align: center; padding: 20px; color: var(--secundario); font-size: 13px; font-weight: bold; }
+
         .form-control {
             width: 100%; padding: 10px; margin-bottom: 12px;
-            border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;
+            border: 1px solid var(--secundario); border-radius: 6px; font-size: 14px;
         }
+        .form-control:focus { outline: 2px solid var(--primario); border-color: var(--secundario); }
         .form-check-input { margin-right: 8px; }
         form label { font-weight: bold; display: block; margin-bottom: 4px; }
         form p { margin-bottom: 12px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+
+            /* Encabezado y menú colapsado */
+            header { padding: 12px 16px; }
+            .menu-toggle { display: block; }
+            header nav {
+                display: none; width: 100%; flex-direction: column;
+                align-items: stretch; flex-wrap: nowrap;
+            }
+            header nav.open { display: flex; }
+            header nav a, header nav span {
+                margin-left: 0; padding: 12px 0;
+                border-top: 1px solid rgba(223, 202, 164, 0.3);
+            }
+            header nav form { padding-top: 10px; }
+            header nav form .btn { width: 100%; margin: 0; }
+
+            /* Contenedor y tarjetas */
+            .container { margin: 16px auto; padding: 0 12px; }
+            .card { padding: 14px; }
+
+            /* Formularios: 16px evita el zoom automático en iPhone */
+            .form-control { font-size: 16px; }
+
+            /* Tablas convertidas en tarjetas */
+            table, thead, tbody, tr, th, td { display: block; width: 100%; }
+            thead {
+                position: absolute; left: -9999px; top: -9999px; /* oculto visualmente, accesible */
+            }
+            tr {
+                background: var(--blanco); border: 1px solid var(--primario);
+                border-left: 5px solid var(--secundario); border-radius: 8px;
+                margin-bottom: 12px; padding: 6px 12px;
+            }
+            td {
+                display: flex; justify-content: space-between; align-items: center;
+                gap: 12px; text-align: right; padding: 8px 0;
+                border-bottom: 1px dashed var(--primario);
+            }
+            td:last-child { border-bottom: none; }
+            td::before {
+                content: attr(data-label); font-weight: bold; color: var(--secundario);
+                text-align: left; flex-shrink: 0;
+            }
+            tr:hover td { background: transparent; }
+
+            /* Botones de acciones en la tarjeta */
+            td .btn { flex: 1; text-align: center; }
+
+            footer { padding: 16px 12px; }
+        }
     </style>
 </head>
 <body>
     <header>
-
-Mi Negocio</h1>
-    <nav>
-        <a href="{% url 'inicio' %}">Inicio</a> 
-        <a href="{% url 'lista_productos' %}">Productos</a> 
-        <a href="{% url 'lista_categorias' %}">Categorías</a>  
-        <a href="{% url 'lista_clientes' %}">Clientes</a> 
-        {% if user.is_authenticated %} 
-        <a href="{% url 'dashboard' %}">Dashboard</a> 
-        <span style="color:#38bdf8;">�� {{ user.username }}</span>  
-        <form action="{% url 'logout' %}" method="post" style="display:inline ;"> 
-        {% csrf_token %} 
-        <button type="submit" class="btn btn-danger" style="margin-left:10p x;">Cerrar sesión</button> 
-        </form> 
-        {% else %} 
-        <a href="{% url 'login' %}">Iniciar sesión</a> 
-        {% endif %} 
+        <h1>Mi Negocio</h1>
+        <button class="menu-toggle" id="menuToggle" type="button"
+                aria-label="Abrir menú" aria-expanded="false" aria-controls="menuPrincipal">&#9776;</button>
+        <nav id="menuPrincipal">
+            <a href="{% url 'inicio' %}">Inicio</a>
+            <a href="{% url 'lista_productos' %}">Productos</a>
+            <a href="{% url 'lista_categorias' %}">Categorías</a>
+            <a href="{% url 'lista_clientes' %}">Clientes</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <span>👤 {{ user.username }}</span>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" style="margin-left:10px;">Cerrar sesión</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Iniciar sesión</a>
+            {% endif %}
         </nav>
     </header>
 
@@ -84,7 +173,16 @@ Mi Negocio</h1>
         {% block content %}{% endblock %}
     </div>
     <footer>
-        Proyecto Integrador - Software que Crece con tu Negocio &copy;{% now "Y" %}
+        Proyecto Integrador - Software que Crece con tu Negocio - Rodolfo &copy;{% now "Y" %}
     </footer>
+
+    <script>
+        const btnMenu = document.getElementById('menuToggle');
+        const menu = document.getElementById('menuPrincipal');
+        btnMenu.addEventListener('click', function () {
+            const abierto = menu.classList.toggle('open');
+            btnMenu.setAttribute('aria-expanded', abierto);
+        });
+    </script>
 </body>
 </html>
